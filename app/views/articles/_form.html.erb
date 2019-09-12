@@ -1,0 +1,53 @@
+<%= form_with(model: article, local: true, class: 'siimple-form') do |form| %>
+  <% if article.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(article.errors.count, "error") %> prohibited this article from being saved:</h2>
+
+      <ul>
+      <% article.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="siimple-form-field">
+    <%= form.label :title, class: 'siimple-label' %>
+    <%= form.text_field :title, id: :article_title, class: 'siimple-input' %>
+  </div>
+
+  <div class="siimple-form-field">
+    <%= form.label :body, class: 'siimple-label' %>
+    <%= form.text_area :body, id: :article_body, class: 'editable siimple-textarea siimple-textarea--fluid' %>
+  </div>
+
+  <div class="siimple-form-field">
+    <%= form.submit class: 'siimple-btn siimple-btn--blue' %>
+  </div>
+<% end %>
+
+
+<script>
+  $(document).ready(function(){
+    var editor = new MediumEditor('.editable', {
+      // placeholder settings
+      placeholder: {
+        text: 'Type your story',
+        hideOnClick: true
+      }
+    });
+
+    $('.editable').mediumInsert({
+      editor: editor,
+      addons: {
+        images: {
+          fileUploadOptions: {
+            url: '/images/upload',
+            type: 'post',
+            acceptFileTypes: /(.|\/)(gif|jpe?g|png)$/i
+          }
+        }
+      }
+    });
+  });
+</script>
